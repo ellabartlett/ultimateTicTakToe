@@ -1,0 +1,23 @@
+[project]
+name = "ultimate-tic-tac-toe-backend"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+  "alembic>=1.16",
+  "fastapi>=0.116",
+  "pydantic-settings>=2.10",
+  "sqlalchemy>=2.0",
+  "uvicorn[standard]>=0.35",
+]
+
+[dependency-groups]
+dev = ["httpx>=0.28", "mypy>=1.18", "pytest>=8.4", "pytest-cov>=6.3", "ruff>=0.13"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.mypy]
+strict = true
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
