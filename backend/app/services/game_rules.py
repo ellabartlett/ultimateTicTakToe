@@ -42,9 +42,12 @@ def apply_move(game: Game, board_index: int, cell_index: int) -> None:
         raise IllegalMove("The game is over.")
     if not _board_is_open(game, board_index):
         raise IllegalMove("That board is not available.")
-    if game.next_board is not None and _board_is_open(game, game.next_board):
-        if game.next_board != board_index:
-            raise IllegalMove("You must play in the routed board.")
+    if (
+        game.next_board is not None
+        and _board_is_open(game, game.next_board)
+        and game.next_board != board_index
+    ):
+        raise IllegalMove("You must play in the routed board.")
     if game.boards[board_index][cell_index] is not None:
         raise IllegalMove("That cell is already marked.")
 

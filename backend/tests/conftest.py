@@ -11,7 +11,7 @@ from app.main import app
 
 
 @pytest.fixture
-def client(monkeypatch: pytest.MonkeyPatch) -> Generator[TestClient, None, None]:
+def client(monkeypatch: pytest.MonkeyPatch) -> Generator[TestClient]:
     test_engine = create_engine(
         "sqlite://",
         connect_args={"check_same_thread": False},
@@ -20,7 +20,7 @@ def client(monkeypatch: pytest.MonkeyPatch) -> Generator[TestClient, None, None]
     Base.metadata.create_all(bind=test_engine)
     test_sessions = sessionmaker(bind=test_engine, autoflush=False, expire_on_commit=False)
 
-    def override_get_db() -> Generator[Session, None, None]:
+    def override_get_db() -> Generator[Session]:
         with test_sessions() as session:
             yield session
 

@@ -1,3 +1,5 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
@@ -15,12 +17,15 @@ def _response(game: Game) -> GameResponse:
 
 
 @router.post("", response_model=GameResponse, status_code=status.HTTP_201_CREATED)
-def create_game_endpoint(session: Session = Depends(get_db)) -> GameResponse:
+def create_game_endpoint(session: Annotated[Session, Depends(get_db)]) -> GameResponse:
     return _response(create_game(session))
 
 
 @router.get("/{game_id}", response_model=GameResponse)
-def get_game_endpoint(game_id: str, session: Session = Depends(get_db)) -> GameResponse:
+def get_game_endpoint(
+    game_id: str,
+    session: Annotated[Session, Depends(get_db)],
+) -> GameResponse:
     try:
         return _response(get_game(session, game_id))
     except GameNotFound as error:
@@ -31,7 +36,7 @@ def get_game_endpoint(game_id: str, session: Session = Depends(get_db)) -> GameR
 def play_move_endpoint(
     game_id: str,
     move: MoveRequest,
-    session: Session = Depends(get_db),
+    session: Annotated[Session, Depends(get_db)],
 ) -> GameResponse:
     try:
         game = play_game_move(session, game_id, move.board_index, move.cell_index)
